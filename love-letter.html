@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Love Letter to You ❤️</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Pacifico&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        .paper-bg {
+            background-color: #fff9f9;
+            background-image: linear-gradient(#ffe0e0 1px, transparent 1px);
+            background-size: 100% 2em;
+        }
+        
+        .handwritten {
+            font-family: 'Dancing Script', cursive;
+        }
+        
+        .title-font {
+            font-family: 'Pacifico', cursive;
+        }
+        
+        @keyframes writing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        
+        .writing-effect {
+            overflow: hidden;
+            white-space: nowrap;
+            animation: writing 4s steps(60, end);
+        }
+        
+        .heart, .chocolate {
+            position: absolute;
+            top: -50px;
+            animation: fall linear infinite;
+        }
+        
+        .heart {
+            color: #ff6b6b;
+            font-size: 24px;
+        }
+        
+        .chocolate {
+            color: #6b4423;
+            font-size: 24px;
+        }
+        
+        @keyframes fall {
+            to {
+                transform: translateY(100vh);
+            }
+        }
+        
+        .chocolate-bg {
+            background: linear-gradient(135deg, #6b4423, #8b5a2b);
+        }
+    </style>
+</head>
+<body class="chocolate-bg min-h-screen overflow-hidden">
+    <nav class="bg-pink-800 bg-opacity-50 p-4">
+        <div class="container mx-auto">
+            <a href="index.html" class="text-pink-200 hover:text-white">← Back to Home</a>
+        </div>
+    </nav>
+
+    <main class="container mx-auto mt-10 px-4">
+        <div class="max-w-2xl mx-auto bg-white rounded-lg shadow-xl p-8 paper-bg relative">
+            <!-- Floating hearts -->
+            <div class="heart absolute -top-8 -left-8 text-4xl text-pink-500">❤️</div>
+            <div class="heart absolute -top-8 -right-8 text-4xl text-pink-500">❤️</div>
+            <div class="heart absolute -bottom-8 -left-8 text-4xl text-pink-500">❤️</div>
+            <div class="heart absolute -bottom-8 -right-8 text-4xl text-pink-500">❤️</div>
+            
+            <!-- Romantic image -->
+            <img src="photo_2025-02-09_13-05-01.jpg" alt="Romantic Hearts" class="mx-auto rounded-full shadow mb-6 w-32 h-32 object-cover border-4 border-pink-200">
+            
+            <audio id="bgMusic" autoplay loop>
+                <source src="./Perfect_×_Blue_🪄_Flute_cover_live_show_@ykaizzk_@srikrishnarevankar8002.mp3" type="audio/mp3">
+                Your browser does not support the audio element.
+            </audio>
+            
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    const music = document.getElementById("bgMusic");
+                    music.volume = 0.5; // Set the volume level
+            
+                    // Unmute on user interaction
+                    document.body.addEventListener("click", () => {
+                        music.muted = false;
+                    }, { once: true });
+                });
+            </script>
+            
+            
+            <!-- Love letter content -->
+            <div class="space-y-6 handwritten text-xl text-pink-900">
+                <p class="writing-effect title-font text-3xl text-center">My Dearest Aarti...</p>
+                
+                <p class="writing-effect" style="animation-delay: 1s;">
+                    On this sweet Chocolate Day, I want to tell you how much sweetness you bring to my life. 
+                    Like chocolate, you make everything better just by being there.
+                </p>
+                
+                <p class="writing-effect" style="animation-delay: 2s;">
+                    Your smile is sweeter than any chocolate I've ever tasted, 
+                    and your love fills my life with a richness that no dessert could match.
+                </p>
+                
+                <p class="writing-effect" style="animation-delay: 3s;">
+                    You're my favorite flavor of happiness, my sweetest dream come true, 
+                    and the most delicious part of my every day.
+                </p>
+                
+                <p class="writing-effect" style="animation-delay: 4s;">
+                    Forever yours,<br>
+                    With all my love ❤️
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Love and Chocolate Rain -->
+    <div id="rain"></div>
+
+    <script>
+        // GSAP animations for text
+        gsap.from('.handwritten p', {
+            opacity: 0,
+            y: 20,
+            duration: 1,
+            stagger: 0.5
+        });
+        
+        gsap.from('.heart', {
+            opacity: 0,
+            scale: 0,
+            duration: 1,
+            stagger: 0.3,
+            delay: 1
+        });
+
+        // Function to create falling hearts and chocolates
+        function createRain() {
+            const rainContainer = document.getElementById('rain');
+            const emojis = ['❤️', '🍫']; // Hearts and chocolates
+
+            for (let i = 0; i < 50; i++) {
+                const emoji = document.createElement('div');
+                emoji.classList.add(Math.random() > 0.5 ? 'heart' : 'chocolate');
+                emoji.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+                emoji.style.left = `${Math.random() * 100}vw`;
+                emoji.style.animationDuration = `${Math.random() * 3 + 2}s`;
+                emoji.style.animationDelay = `${Math.random() * 2}s`;
+                rainContainer.appendChild(emoji);
+            }
+        }
+
+        createRain();
+    </script>
+</body>
+</html>

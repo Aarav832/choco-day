@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catch the Chocolates! 🍫</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        .game-container {
+            position: relative;
+            height: 400px;
+            overflow: hidden;
+            border: 3px solid #4a1c1c;
+            background: linear-gradient(135deg, #2c1810 0%, #4a1c1c 100%);
+        }
+        
+        .basket {
+            position: absolute;
+            bottom: 20px;
+            width: 100px;
+            height: 60px;
+            cursor: pointer;
+            transition: left 0.1s;
+        }
+        
+        .falling-chocolate {
+            position: absolute;
+            font-size: 2rem;
+            animation: fall linear;
+        }
+        
+        @keyframes fall {
+            from { top: -50px; }
+            to { top: 400px; }
+        }
+
+        .game-over {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2rem;
+            border-radius: 1rem;
+            text-align: center;
+            z-index: 1000;
+        }
+
+        .game-over h2 {
+            font-size: 2rem;
+            color: #ff1493;
+            margin-bottom: 1rem;
+        }
+
+        .game-over p {
+            font-size: 1.2rem;
+            color: #4a2c2a;
+        }
+    </style>
+</head>
+<body class="chocolate-bg min-h-screen">
+    <nav class="bg-pink-800 bg-opacity-50 p-4">
+        <div class="container mx-auto">
+            <a href="index.html" class="text-pink-200 hover:text-white">← Back to Home</a>
+        </div>
+    </nav>
+
+    <main class="container mx-auto mt-10 px-4">
+        <div class="text-center mb-8">
+            <img src="photo_2025-02-09_11-55-06 (2).jpg" alt="Chocolate Game" class="mx-auto rounded-full shadow-lg mb-4">
+            <h2 class="text-3xl font-bold text-pink-200">Catch the Love Chocolates! 🍫</h2>
+            <p class="text-xl text-pink-100 mt-2">Score: <span id="score">0</span> Love Points</p>
+        </div>
+
+        <div class="game-container mx-auto rounded-lg">
+            <div id="basket" class="basket">🧺</div>
+            <div id="gameOver" class="game-over">
+                <h2>Game Over! 💔</h2>
+                <p>You missed a chocolate! Your final score is <span id="finalScore">0</span>.</p>
+                <button id="restartGame" class="bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-4 rounded mt-4">
+                    Play Again
+                </button>
+            </div>
+        </div>
+
+        <div class="text-center mt-8">
+            <button id="startGame" class="bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-4 rounded">
+                Start Game
+            </button>
+        </div>
+    </main>
+
+    <script>
+        let score = 0;
+        let gameInterval;
+        let isGameRunning = false;
+        
+        const basket = document.getElementById('basket');
+        const gameContainer = document.querySelector('.game-container');
+        const scoreElement = document.getElementById('score');
+        const startButton = document.getElementById('startGame');
+        const gameOver = document.getElementById('gameOver');
+        const finalScore = document.getElementById('finalScore');
+        const restartButton = document.getElementById('restartGame');
+        
+        function updateBasketPosition(e) {
+            const rect = gameContainer.getBoundingClientRect();
+            const x = e.clientX - rect.left - basket.clientWidth / 2;
+            basket.style.left = Math.max(0, Math.min(rect.width - basket.clientWidth, x)) + 'px';
+        }
+        
+        function createChocolate() {
+            const chocolate = document.createElement('div');
+            chocolate.className = 'falling-chocolate';
+            chocolate.textContent = '🍫';
+            chocolate.style.left = Math.random() * (gameContainer.clientWidth - 40) + 'px';
+            gameContainer.appendChild(chocolate);
+            
+            const duration = 3000 + Math.random() * 1000;
+            
+            gsap.to(chocolate, {
+                top: gameContainer.clientHeight,
+                duration: duration / 1000,
+                ease: 'none',
+                onComplete: () => {
+                    if (!chocolate.caught) {
+                        endGame();
+                    }
+                    chocolate.remove();
+                },
+                onUpdate: () => checkCollision(chocolate)
+            });
+        }
+        
+        function checkCollision(chocolate) {
+            const basketRect = basket.getBoundingClientRect();
+            const chocolateRect = chocolate.getBoundingClientRect();
+            
+            if (
+                chocolateRect.bottom >= basketRect.top &&
+                chocolateRect.top <= basketRect.bottom &&
+                chocolateRect.right >= basketRect.left &&
+                chocolateRect.left <= basketRect.right &&
+                !chocolate.caught
+            ) {
+                chocolate.caught = true;
+                chocolate.remove();
+                score += 10;
+                scoreElement.textContent = score;
+                
+                // Show love message
+                const message = document.createElement('div');
+                message.className = 'absolute text-pink-200 text-2xl font-bold';
+                message.textContent = '❤️ +10';
+                message.style.left = basketRect.left + 'px';
+                message.style.top = (basketRect.top - 30) + 'px';
+                gameContainer.appendChild(message);
+                
+                gsap.to(message, {
+                    opacity: 0,
+                    y: -30,
+                    duration: 1,
+                    onComplete: () => message.remove()
+                });
+            }
+        }
+        
+        function endGame() {
+            isGameRunning = false;
+            clearInterval(gameInterval);
+            gameOver.style.display = 'block';
+            finalScore.textContent = score;
+            document.querySelectorAll('.falling-chocolate').forEach(c => c.remove());
+        }
+        
+        function startGame() {
+            isGameRunning = true;
+            score = 0;
+            scoreElement.textContent = score;
+            startButton.textContent = 'Stop Game';
+            gameOver.style.display = 'none';
+            gameInterval = setInterval(createChocolate, 1000);
+        }
+        
+        function stopGame() {
+            isGameRunning = false;
+            startButton.textContent = 'Start Game';
+            clearInterval(gameInterval);
+            document.querySelectorAll('.falling-chocolate').forEach(c => c.remove());
+        }
+        
+        startButton.addEventListener('click', () => {
+            if (!isGameRunning) {
+                startGame();
+            } else {
+                stopGame();
+            }
+        });
+        
+        restartButton.addEventListener('click', () => {
+            startGame();
+        });
+        
+        gameContainer.addEventListener('mousemove', updateBasketPosition);
+    </script>
+</body>
+</html>

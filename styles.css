@@ -1,0 +1,122 @@
+/* styles.css */
+:root {
+    --primary-color: #ff69b4;
+    --secondary-color: #4a1c1c;
+    --accent-color: #ff1493;
+    --text-light: #fff9f9;
+    --text-dark: #2c1810;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--secondary-color);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 6px;
+}
+
+/* Animations */
+@keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+@keyframes floating {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}
+
+@keyframes sparkle {
+    0%, 100% { opacity: 0; transform: scale(0); }
+    50% { opacity: 1; transform: scale(1); }
+}
+
+/* Common Classes */
+.heartbeat {
+    animation: heartbeat 1.5s infinite;
+}
+
+.floating {
+    animation: floating 3s ease-in-out infinite;
+}
+
+.sparkle {
+    animation: sparkle 2s infinite;
+}
+
+/* Custom Background Patterns */
+.chocolate-pattern {
+    background-color: var(--secondary-color);
+    background-image: radial-gradient(var(--primary-color) 1px, transparent 1px);
+    background-size: 20px 20px;
+}
+
+.hearts-pattern {
+    position: relative;
+}
+
+.hearts-pattern::before {
+    content: '❤️';
+    position: absolute;
+    font-size: 20px;
+    opacity: 0.1;
+    transform: rotate(45deg);
+}
+
+/* Interactive Elements */
+.hover-scale {
+    transition: transform 0.3s ease;
+}
+
+.hover-scale:hover {
+    transform: scale(1.05);
+}
+
+.glow-effect {
+    box-shadow: 0 0 10px var(--primary-color);
+    transition: box-shadow 0.3s ease;
+}
+
+.glow-effect:hover {
+    box-shadow: 0 0 20px var(--accent-color);
+}
+
+/* Custom Cards */
+.love-card {
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    border-radius: 15px;
+    padding: 20px;
+    color: var(--text-light);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Typography */
+.handwritten {
+    font-family: 'Dancing Script', cursive;
+    line-height: 1.6;
+}
+
+.gradient-text {
+    background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .love-card {
+        margin: 10px;
+        padding: 15px;
+    }
+    
+    .handwritten {
+        font-size: 90%;
+    }
+}

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Chocolate Day Aarti! ❤️</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <style>
+        .chocolate-bg {
+            background: linear-gradient(135deg, #4a1c1c 0%, #2c1810 100%);
+        }
+        
+        .floating-heart {
+            position: absolute;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .chocolate-piece {
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        
+        .chocolate-piece:hover {
+            transform: scale(1.1);
+        }
+        
+        .love-message {
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .modal-button {
+            margin: 10px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .modal-button.yes {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .modal-button.no {
+            background-color: #f44336;
+            color: white;
+        }
+    </style>
+</head>
+<style>
+    h1 {
+        color: white;
+        font-family: 'Dancing Script', cursive;
+        font-style: italic;
+    }
+</style>
+<body class="chocolate-bg min-h-screen">
+    <!-- Background Music -->
+    <audio id="backgroundMusic" loop>
+        <source src="./Perfect_×_Blue_🪄_Flute_cover_live_show_@ykaizzk_@srikrishnarevankar8002.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <!-- Modal Dialog -->
+    <div id="musicModal" class="modal">
+        <div class="modal-content">
+            <p>Do you want to listen to music?</p>
+            <button class="modal-button yes" onclick="playMusic()">Yes</button>
+            <button class="modal-button no" onclick="closeModal()">No</button>
+        </div>
+    </div>
+
+    <nav class="bg-pink-800 bg-opacity-50 p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-3xl font-bold text-pink-200">❤️ For my Baby </h1>
+            <div class="space-x-4">
+                <a href="love-letter.html" class="text-pink-200 hover:text-white">Love Letter</a>
+                <a href="chocolate-game.html" class="text-pink-200 hover:text-white">Catch Chocolates</a>
+                <a href="quiz.html" class="text-pink-200 hover:text-white">Sweet Quiz</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto mt-10 px-4">
+        <div class="text-center">
+            <img src="photo_2025-02-09_13-12-01.jpg" alt="Romantic Chocolate Theme" class="mx-auto rounded-full shadow-lg mb-8">
+            <h2 class="text-4xl font-bold text-pink-200 mb-6">Happy Chocolate Day My Love! 🍫</h2>
+            <p class="text-xl text-pink-100 mb-8">Click on the floating chocolates to reveal sweet messages...</p>
+        </div>
+
+        <div id="chocolate-container" class="relative h-96">
+            <!-- Chocolates will be added dynamically -->
+        </div>
+    </main>
+
+    <script>
+        const sweetMessages = [
+            "You're sweeter than any chocolate! 😘",
+            "My life is delicious with you in it! 🍫",
+            "I love you more than chocolate! 🥰❤️",
+            "You're my favorite flavor of happiness! 💝",
+            "Life without you would be like chocolate without sugar! 🍪"
+        ];
+
+        function createFloatingChocolates() {
+            const container = document.getElementById('chocolate-container');
+            
+            for (let i = 0; i < 8; i++) {
+                const chocolate = document.createElement('div');
+                chocolate.className = 'chocolate-piece absolute';
+                chocolate.innerHTML = '🍫';
+                chocolate.style.fontSize = '2rem';
+                chocolate.style.left = `${Math.random() * 90}%`;
+                chocolate.style.top = `${Math.random() * 80}%`;
+                
+                chocolate.addEventListener('click', () => revealMessage(chocolate, i));
+                container.appendChild(chocolate);
+                
+                anime({
+                    targets: chocolate,
+                    translateY: [-20, 20],
+                    duration: 2000 + Math.random() * 1000,
+                    direction: 'alternate',
+                    loop: true,
+                    easing: 'easeInOutQuad'
+                });
+            }
+        }
+
+        function revealMessage(element, index) {
+            const message = document.createElement('div');
+            message.className = 'love-message absolute text-pink-200 text-lg font-bold';
+            message.textContent = sweetMessages[index % sweetMessages.length];
+            message.style.left = element.style.left;
+            message.style.top = element.style.top;
+            
+            element.parentNode.appendChild(message);
+            
+            gsap.to(message, {
+                opacity: 1,
+                duration: 0.5,
+                y: -50,
+                onComplete: () => {
+                    setTimeout(() => {
+                        gsap.to(message, {
+                            opacity: 0,
+                            duration: 0.5,
+                            onComplete: () => message.remove()
+                        });
+                    }, 2000);
+                }
+            });
+        }
+
+        // Show modal when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            const modal = document.getElementById('musicModal');
+            modal.style.display = 'flex';
+        });
+
+        // Play music and close modal
+        function playMusic() {
+            const audio = document.getElementById('backgroundMusic');
+            audio.play();
+            closeModal();
+        }
+
+        // Close modal
+        function closeModal() {
+            const modal = document.getElementById('musicModal');
+            modal.style.display = 'none';
+        }
+
+        // Initialize floating chocolates
+        document.addEventListener('DOMContentLoaded', createFloatingChocolates);
+    </script>
+</body>
+</html>
